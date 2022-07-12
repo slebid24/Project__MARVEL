@@ -16,6 +16,13 @@
         height: 180px;
         object-fit: cover;
     }
+
+    &__img--nf {
+        width: 180px;
+        height: 180px;
+        object-fit: scale-down;
+    }
+
     &__info {
         display: grid;
         grid-template-rows: minmax(29px, auto) 90px 38px;

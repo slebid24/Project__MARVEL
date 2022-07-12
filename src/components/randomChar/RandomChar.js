@@ -46,6 +46,7 @@ class RandomChar extends Component {
         this.setState({
             char: {}, 
             loading: true,
+            error: false
         })
         console.log("click")
     }
@@ -92,14 +93,20 @@ class RandomChar extends Component {
 
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki} = char;
+    
     const formatDescrp = (des) => {
         let result = des ? des : "There is no description for this character";
-
-        return result.length < 190 ? result : `${result.slice(0, 190)}...`
+        return result.length < 190 ? result : `${result.slice(0, 200)}...`
     }
+
+    const imgStyle = (img) => {
+        let imgType = img.match((/image_not_available/g))
+        return imgType ? "randomchar__img--nf" : "randomchar__img"
+    }
+
     return (
         <div className="randomchar__block">
-            <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+            <img src={thumbnail} alt="Random character" className={imgStyle(thumbnail)}/>
                     <div className="randomchar__info">
                         <p className="randomchar__name">{name}</p>
                         <p className="randomchar__descr">
