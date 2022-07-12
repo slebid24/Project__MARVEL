@@ -43,24 +43,24 @@ class RandomChar extends Component {
     }
 
     pickRandomChar = () => {
-        console.log(2)
         this.setState({
             char: {}, 
             loading: true,
         })
+        console.log("click")
     }
     
 
 
     componentDidUpdate = () => {
-        console.log(1)
-        console.log(this.state.char)
+        console.log("update")
         if (Object.keys(this.state.char).length == 0) {
             this.updateChar();
         }
     }
     
     render() {
+        console.log("render")
         const {char, loading, error} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
