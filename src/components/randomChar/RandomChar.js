@@ -48,7 +48,7 @@ class RandomChar extends Component {
             loading: true,
             error: false
         })
-        console.log("click")
+
     }
     
 
@@ -61,12 +61,11 @@ class RandomChar extends Component {
     }
     
     render() {
-        console.log("render")
         const {char, loading, error} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char}/> : null;
-
+                                                                                                                                                                                                    
         return (
             <div className="randomchar">
                 {errorMessage}
@@ -93,7 +92,7 @@ class RandomChar extends Component {
 
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki} = char;
-    
+
     const formatDescrp = (des) => {
         let result = des ? des : "There is no description for this character";
         return result.length < 190 ? result : `${result.slice(0, 200)}...`
