@@ -1,13 +1,11 @@
 import './charList.scss';
 import { Component } from 'react';
-import abyss from '../../resources/img/abyss.jpg';
 import MarvelService from '../../services/MarvelService';
 import Spinner from "../spinner/Spinner";
 
 
-
-
-class CharList extends Component {
+class CharList extends Component  {
+   
     state = {
         chars: [],
         loading: true,
@@ -18,8 +16,10 @@ class CharList extends Component {
     onCharLoaded = (chars) => {
         this.setState({
             chars: chars, 
-            loading: false
+            loading: false,
+            id: null
         })
+        
     }
 
     downloadChars = () => {
@@ -31,29 +31,44 @@ class CharList extends Component {
     }
 
     render() {
-        console.log(this.state)
+        const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} func={this.props.onCharSelected}/>
         return (
             <div className="char__list">
-                <ul className="char__grid">
-                    <li className="char__item">
-                        <Spinner/>
-                    </li>
-                    <li className="char__item char__item_selected">
-                        <Spinner/>
-                    </li>
-                    <li className="char__item">
-                        <Spinner/>
-                    </li>
-                    <li className="char__item">
-                        <Spinner/>
-                    </li>
-                </ul>
+                <div className='char__grid'>
+                    {content}
+                </div>
                 <button  className="button button__main button__long">
-                    <div className="inner">load more</div>
-                </button>
+                        <div className="inner">load more</div>
+                    </button>
             </div>
         )
-    }
+    } 
 }
+
+const View = ({arr, func}) => {
+    return arr.map((item) => {
+       return (
+       <li className="char__item" key={item.id} onClick={() => {func(item.id)}} >
+           <img src={item.thumbnail} alt="abyss"/>
+               <div className="char__name">{item.name}</div>
+       </li>
+       )
+   })
+}
+
+const Loading = () => {
+    const newArr = [];
+    for (let i = 0; i < 9; i++) {
+        newArr.push(
+            <li className="char__item" key={i}>
+                <div className='char__spinner'>
+                    <Spinner/>
+                </div>
+            </li>
+        )
+    }
+    return newArr;
+}
+
 
 export default CharList;
