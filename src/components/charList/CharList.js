@@ -22,12 +22,18 @@ class CharList extends Component  {
         
     }
 
-    downloadChars = () => {
-        this.MarvelService.getAllCharacters().then(this.onCharLoaded)
+    onRequest = (offset) => {
+        this.MarvelService.getAllCharacters(offset)
+                .then(this.onCharLoaded)
     }
 
     componentDidMount = () => {
-        this.downloadChars();
+       this.onRequest()
+       this.setState({
+         
+        loading: true,
+        
+    })
     }
 
     render() {
@@ -36,6 +42,7 @@ class CharList extends Component  {
             <div className="char__list">
                 <div className='char__grid'>
                     {content}
+                    <Loading/>
                 </div>
                 <button  className="button button__main button__long">
                         <div className="inner">load more</div>
