@@ -2,6 +2,7 @@ import './charList.scss';
 import { Component } from 'react';
 import MarvelService from '../../services/MarvelService';
 import Spinner from "../spinner/Spinner";
+import PropTypes from "prop-types"
 
 
 class CharList extends Component  {
@@ -9,23 +10,37 @@ class CharList extends Component  {
     state = {
         chars: [],
         loading: true,
+        newItemLoading: false,
+        offset: 210
     }
 
     MarvelService = new MarvelService();
 
-    onCharLoaded = (chars) => {
-        this.setState({
-            chars: chars, 
-            loading: false,
-            id: null
-        })
+    onCharListLoaded = (newChars) => {
+        this.setState(({offset, chars}) => (
+            {
+                chars: [...chars, ...newChars], 
+                loading: false,
+                newItemLoading: false,
+                offset: offset + 9
+            }
+        ))
         
     }
 
-    onRequest = (offset) => {
-        this.MarvelService.getAllCharacters(offset)
-                .then(this.onCharLoaded)
+    onCharListLoading = () => {
+        this.setState({
+            newItemLoading: true
+        })
     }
+
+    onRequest = (offset) => {
+        this.onCharListLoading();
+        this.MarvelService.getAllCharacters(offset)
+                .then(this.onCharListLoaded)
+    }
+
+    
 
     componentDidMount = () => {
        this.onRequest()
@@ -38,13 +53,14 @@ class CharList extends Component  {
 
     render() {
         const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} func={this.props.onCharSelected}/>
+        const downloadContent = this.state.newItemLoading ? <Loading/> : null;
         return (
             <div className="char__list">
                 <div className='char__grid'>
                     {content}
-                    <Loading/>
+                    {downloadContent}
                 </div>
-                <button  className="button button__main button__long">
+                <button  className="button button__main button__long" onClick={() => this.onRequest(this.state.offset)}>
                         <div className="inner">load more</div>
                     </button>
             </div>
@@ -77,5 +93,8 @@ const Loading = () => {
     return newArr;
 }
 
+CharList.propTypes = {
+    onCharSelected: PropTypes.func,
+}
 
 export default CharList;
