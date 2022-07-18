@@ -51,8 +51,13 @@ class CharList extends Component  {
     })
     }
 
+    imgStyle = (img) => {
+        let imgType = img.match((/image_not_available/g))
+        return imgType ? true : false;
+    }
+
     render() {
-        const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} func={this.props.onCharSelected}/>
+        const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} func={this.props.onCharSelected} imgStyle={this.imgStyle}/>
         const downloadContent = this.state.newItemLoading ? <Loading/> : null;
         return (
             <div className="char__list">
@@ -68,11 +73,11 @@ class CharList extends Component  {
     } 
 }
 
-const View = ({arr, func}) => {
+const View = ({arr, func, imgStyle}) => {
     return arr.map((item) => {
        return (
        <li className="char__item" key={item.id} onClick={() => {func(item.id)}} >
-           <img src={item.thumbnail} alt="abyss"/>
+           <img style={imgStyle(item.thumbnail) ? {"object-fit": "contain", "position": "relative", "top": "-5%"} : {}} src={item.thumbnail} alt={item.name}/>
                <div className="char__name">{item.name}</div>
        </li>
        )
