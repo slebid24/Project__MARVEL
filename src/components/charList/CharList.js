@@ -40,8 +40,6 @@ class CharList extends Component  {
                 .then(this.onCharListLoaded)
     }
 
-    
-
     componentDidMount = () => {
        this.onRequest()
        this.setState({
@@ -56,8 +54,12 @@ class CharList extends Component  {
         return imgType ? true : false;
     }
 
+    classType = () => {
+        return "char__item"
+    }
+
     render() {
-        const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} func={this.props.onCharSelected} imgStyle={this.imgStyle}/>
+        const content = this.state.loading ? <Loading/> : <View arr={this.state.chars} props={this.props} imgStyle={this.imgStyle} classType={this.classType}/>
         const downloadContent = this.state.newItemLoading ? <Loading/> : null;
         return (
             <div className="char__list">
@@ -72,12 +74,15 @@ class CharList extends Component  {
         )
     } 
 }
-
-const View = ({arr, func, imgStyle}) => {
+// 
+const View = ({arr, props, imgStyle}) => {
+    
     return arr.map((item) => {
+       const active = props.charId === item.id
+       const clazz = active ? "char__item char__item_selected" : "char__item";
        return (
-       <li className="char__item" key={item.id} onClick={() => {func(item.id)}} >
-           <img style={imgStyle(item.thumbnail) ? {"object-fit": "contain", "position": "relative", "top": "-5%"} : {}} src={item.thumbnail} alt={item.name}/>
+       <li tabIndex={0} className={clazz}  key={item.id} onClick={() => {props.onCharSelected(item.id)}} >
+           <img style={imgStyle(item.thumbnail) ? {"objectFit": "fill"} : {}} src={item.thumbnail} alt={item.name}/>
                <div className="char__name">{item.name}</div>
        </li>
        )
